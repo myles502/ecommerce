@@ -35,12 +35,12 @@ Product.init(
         isInteger: true
       }
     },
-    Category_id: {
+    category_id: {
       type: DataTypes.INTEGER,
       references: {
         model: 'category',
         key: 'id',
-        unique: false
+       
       }
     },
     
