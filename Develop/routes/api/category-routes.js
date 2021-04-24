@@ -1,10 +1,9 @@
 const router = require('express').Router();
 const { Category, Product } = require('../../models');
-const { restore } = require('../../models/Product');
 
 // The `/api/categories` endpoint
 
-router.get('/', (req, res) => { 
+router.get('/', async(req,res) => { 
   try{
     const categoryData = await Category.findAll({
       include: [Product]
@@ -15,7 +14,7 @@ router.get('/', (req, res) => {
   }
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async(req,res) => {
   // find one category by its `id` value
   // be sure to include its associated Products
   try{
@@ -28,7 +27,7 @@ router.get('/:id', (req, res) => {
   }
 });
 
-router.post('/', (req, res) => {
+router.post('/', async(req,res) => {
   // create a new category
   try{
     const categoryData = await Category.create(req.body);
@@ -38,17 +37,19 @@ router.post('/', (req, res) => {
   }
 });
 //update a category by its `id` value 
-router.put('/:id', (req, res) => {
+router.put('/:id', async(req,res) => {
   try {
-    const categoryData = await Category.update(req.body.id);
+    const categoryData = await Category.update(req.body,{
+      where:{id:req.params.id}
+    });
     res.status(200).json(categoryData);
   } catch (err) {
-    res.status(400).json(err);// do i add where id:req.body.id?
+    res.status(400).json(err);
   }
 });
   // delete a category by its `id` value
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async(req,res) => {
   try {
     const CategoryData = await Category.destroy({
       where: {
